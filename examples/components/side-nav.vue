@@ -202,6 +202,7 @@
 <script>
   import bus from '../bus';
   import compoLang from '../i18n/component.json';
+  import {getFemessageNavs} from 'element-ui/src/utils/get-femessage-navs';
 
   export default {
     props: {
@@ -280,24 +281,6 @@
         if (!target.nextElementSibling || target.nextElementSibling.tagName !== 'UL') return;
         this.hideAllMenu();
         event.currentTarget.nextElementSibling.style.height = 'auto';
-      },
-
-      getFemessageNavs() {
-        const xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = _ => {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            const {data: navs} = JSON.parse(xhr.responseText);
-            this.femessageNavs = navs.map(nav => {
-              nav.url = `https://frontend-infra.deepexi.com/home/index.html#/material/${nav.repoName}`;
-              return nav;
-            }).filter(nav => nav.lib && nav.lib.indexOf('element') > -1);
-          }
-        };
-        xhr.open(
-          'GET',
-          '//mockapi.eolinker.com/jttjNwp60fc1c9e944fdf1cc494b28a7ca4cfe66bbafee1/open'
-        );
-        xhr.send();
       }
     },
 
@@ -315,7 +298,9 @@
     },
     mounted() {
       this.handleResize();
-      this.getFemessageNavs();
+      getFemessageNavs().then(navs=>{
+        this.femessageNavs = navs;
+      });
       window.addEventListener('resize', this.handleResize);
     },
     beforeDestroy() {
