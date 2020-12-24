@@ -23,21 +23,31 @@
           const firstUpperCase = str => {
             return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
           };
-          this.tabs.every((tab, index) => {
+          const isHorizon = sizeName === 'width';
+
+          this.tabs.every((tab) => {
             let $el = arrayFind(this.$parent.$refs.tabs || [], t => t.id.replace('tab-', '') === tab.paneName);
             if (!$el) { return false; }
 
+            const tabStyles = window.getComputedStyle($el);
             if (!tab.active) {
               offset += $el[`client${firstUpperCase(sizeName)}`];
+              if (isHorizon) {
+                offset += parseFloat(tabStyles.marginLeft) + parseFloat(tabStyles.marginRight);
+              } else {
+                offset += parseFloat(tabStyles.marginTop) + parseFloat(tabStyles.marginBottom);
+              }
               return true;
             } else {
               tabSize = $el[`client${firstUpperCase(sizeName)}`];
-              const tabStyles = window.getComputedStyle($el);
-              if (sizeName === 'width' && this.tabs.length > 1) {
+              if (isHorizon && this.tabs.length > 1) {
                 tabSize -= parseFloat(tabStyles.paddingLeft) + parseFloat(tabStyles.paddingRight);
               }
-              if (sizeName === 'width') {
+              if (isHorizon) {
                 offset += parseFloat(tabStyles.paddingLeft);
+                offset += parseFloat(tabStyles.marginLeft);
+              } else {
+                offset += parseFloat(tabStyles.marginTop);
               }
               return false;
             }
