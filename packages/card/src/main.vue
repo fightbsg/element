@@ -1,5 +1,6 @@
 <template>
-  <div class="el-card" :class="shadow ? 'is-' + shadow + '-shadow' : 'is-always-shadow'">
+  <div class="el-card" :class="shadow ? 'is-' + shadow + '-shadow' : 'is-always-shadow'"
+       v-bind="$attrs" v-on="$listeners">
     <div class="el-card__header" v-if="$slots.header || header">
       <slot name="header">{{ header }}</slot>
     </div>
