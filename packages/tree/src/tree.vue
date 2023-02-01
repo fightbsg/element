@@ -10,7 +10,7 @@
     role="tree"
   >
     <virtual-list v-if="height" :style="{ height: height + 'px', 'overflow-y': 'auto' }"
-      :data-key="getNodeKey"
+      data-key="id"
       :data-sources="visibleList"
       :data-component="itemComponent"
       :keeps="Math.ceil(height / 22) + extraLine"
